@@ -1,0 +1,63 @@
+@startuml
+
+package "com.wlu.CP670.fort7350_Project" {
+class Exercise {
+String name
+String exerciseType
+String exerciseTarget
+ArrayList<Set> sets
+
+int getTotalWeight()
+int getTotalReps()
+}
+note top
+exerciseType - barbell, dumbell, machine, body weight, ...
+exerciseTarget - bicep, tricep, ...
+
+end note
+
+interface IExerciseList.Presenter{
+    ArrayList<ExerciseList> getExerciseList(ExerciseFilter)
+    openExerciseEditor(Exercise)
+    stop();
+}
+
+
+interface IExerciseList.View{
+    displayExercisesByFilter(ExerciseFilter)
+    updateProgressBar(int);
+    showExerciseEditor(Exercise)
+}
+
+enum ExerciseFilter{
+    TYPE
+    TARGET
+    DATE_RANGE
+}
+
+class Set{
+int weight
+int reps
+}
+
+AsyncTask <|-- ExerciseQuery
+class ExerciseQuery{
+String category
+String name
+URL videoLink
+
+URL getVideoLink()
+String getName()
+String getCategory()
+}
+
+class Weight{
+int starting
+int current
+LocalDate startDate
+LocalDateTime lastUpdate
+
+}
+
+}
+@enduml

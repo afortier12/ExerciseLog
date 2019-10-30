@@ -1,0 +1,39 @@
+@startuml
+:database: as Db
+:User: as user
+:XML: as xml
+
+left to right direction
+
+rectangle exercises {
+(Log data) as (Log)
+(View History) as (history)
+(Browse Exercises) as (browse)
+(Select Exercise) as (select)
+(Start Timer) as (start)
+
+
+user -- (browse)
+user -- (select)
+user - (start)
+
+
+(select) <|-- (history)
+(select) <|-- (Log)
+
+
+Timer <. (start)
+Timer ..> (Log)
+
+(browse) ---- xml
+(history) -- Db
+(Log) -- Db
+}
+
+rectangle tools{
+(Update weight) as (weight)
+
+user  -- (weight)
+(weight) ---- Db
+}
+@enduml

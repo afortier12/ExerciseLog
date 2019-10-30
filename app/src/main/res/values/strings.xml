@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Exercise Log</string>
+    <string name="preference_name">my_shared_preferences</string>
+    <string name="preference_key_default_loaded">default_loaded</string>
+    <string name="action_filter">Filter</string>
+    <string name="action_edit">Edit Exercise</string>
+    <string name="action_setting">Settings</string>
+    <string name="action_about">About</string>
+</resources>

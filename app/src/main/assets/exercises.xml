@@ -1,0 +1,47 @@
+<exercises>
+    <size value = "11"/>
+    <exercise name = "Standing barbell curl">
+        <target>Biceps</target>
+        <type>Barbell</type>
+    </exercise>
+    <exercise name = "Concentration curl">
+        <target>Biceps</target>
+        <type>Dumbell</type>
+    </exercise>
+    <exercise name = "Hammer curl">
+        <target>Biceps</target>
+        <type>Dumbell</type>
+    </exercise>
+    <exercise name = "Standing Dumbell curl">
+        <target>Biceps</target>
+        <type>Dumbell</type>
+    </exercise>
+    <exercise name = "Spider curl">
+        <target>Biceps</target>
+        <type>Dumbell</type>
+    </exercise>
+    <exercise name = "Preacher curl">
+        <target>Biceps</target>
+        <type>Barbell</type>
+    </exercise>
+    <exercise name = "Close-grip bench press">
+        <target>Triceps</target>
+        <type>Barbell</type>
+    </exercise>
+    <exercise name = "Tricep Pushdown">
+        <target>Triceps</target>
+        <type>Machine</type>
+    </exercise>
+    <exercise name = "Tricep Dips">
+        <target>Triceps</target>
+        <type>Bodyweight</type>
+    </exercise>
+    <exercise name = "Overhead Tricep Extension">
+        <target>Triceps</target>
+        <type>Dumbell</type>
+    </exercise>
+    <exercise name = "Lying Tricep Extension">
+        <target>Triceps</target>
+        <type>Barbell</type>
+    </exercise>
+</exercises>
