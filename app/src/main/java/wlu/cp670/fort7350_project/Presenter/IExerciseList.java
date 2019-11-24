@@ -1,5 +1,7 @@
 package wlu.cp670.fort7350_project.Presenter;
 
+import android.content.Context;
+
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -10,9 +12,9 @@ import wlu.cp670.fort7350_project.Utils.ExerciseFilter;
 public interface IExerciseList {
 
     public interface Presenter{
+        int loadDefaults(Context context);
         void getExerciseList();
         void filterExerciseList(ExerciseFilter filter, String filterValue);
-        void openExerciseEditor(Exercise exercise);
         void updateExerciseList(ArrayList<ExerciseListItem> exerciseList);
         void stop();
     }
@@ -22,7 +24,6 @@ public interface IExerciseList {
         void showProgressBar(int value);
         void displayExerciseList(ArrayList<ExerciseListItem> exerciseList);
         void displayFilteredExerciseList(ArrayList<ExerciseListItem> exerciseList);
-        void showExerciseEditor(Exercise exercise);
 
     }
 }

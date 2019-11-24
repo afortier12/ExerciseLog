@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="activity_margin">16dp</dimen>
+    <dimen name="list_margin">10dp</dimen>
+    <dimen name="title_text">20sp</dimen>
+    <dimen name="input_text">20sp</dimen>
+    <dimen name="type_text">14sp</dimen>
+    <dimen name="list_text">18sp</dimen>
+    <dimen name="default_margin">10sp</dimen>
+
+</resources>

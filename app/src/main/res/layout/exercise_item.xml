@@ -1,12 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:paddingBottom="@dimen/default_margin"
+    android:paddingLeft="@dimen/activity_margin"
+    android:paddingRight="@dimen/activity_margin"
+    android:paddingTop="@dimen/default_margin"
+    android:orientation="vertical"
+    android:focusable="true" tools:targetApi="m">
 
     <TextView
         android:id="@+id/exerciseItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-</LinearLayout>
+        android:layout_below="@id/itemHeader"
+        android:layout_marginStart="@dimen/default_margin"
+        android:text="Exercise"
+        android:textColor="@color/list_text"
+        android:textSize="@dimen/list_text" />
+
+    <LinearLayout
+        android:id="@+id/itemHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/exerciseTarget"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/type_text"
+            android:textSize="@dimen/type_text"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="Target"
+            android:layout_gravity="left"
+            android:layout_weight="80"
+            />
+
+        <TextView
+            android:id="@+id/exerciseType"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="Type"
+            android:textColor="@color/type_text"
+            android:textSize="@dimen/type_text" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+<TextView
+    android:id="@+id/weight_label"
+    android:layout_width="80dp"
+    android:layout_height="wrap_content"
+    android:layout_alignParentStart="true"
+    android:layout_marginTop="@dimen/list_margin"
+    android:layout_marginStart="@dimen/default_margin"
+    android:text="35LB"
+    android:textSize="14sp"
+    android:textColor="@android:color/black"/>
+
+
+
+<TextView
+    android:id="@+id/x_label"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/list_margin"
+    android:text="x"
+    android:textColor="@android:color/black"
+    android:textSize="14sp"
+    android:textAlignment="center"
+    android:layout_toStartOf="@id/weight_result"/>
+
+<TextView
+    android:id="@+id/weight_result"
+    android:layout_width="40dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/list_margin"
+    android:layout_marginBottom="@dimen/list_margin"
+    android:layout_centerHorizontal="true"
+    android:gravity="center_horizontal"
+    android:text="00"
+    android:textSize="14sp"
+    android:textColor="@android:color/black" />
+
+<ImageButton
+    android:id="@+id/inc_button"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_toEndOf="@id/weight_result"
+    android:layout_marginStart="@dimen/default_margin"
+    android:layout_centerVertical="true"
+    android:adjustViewBounds="true"
+    android:contentDescription="@string/add_weight_desc"
+    android:src="@drawable/ic_add_box_24px"/>
+
+<ImageButton
+    android:id="@+id/dec_button"
+    android:layout_width="24dp"
+    android:layout_height="24dp"
+    android:layout_toEndOf="@id/inc_button"
+    android:layout_marginStart="20dp"
+    android:layout_centerVertical="true"
+    android:adjustViewBounds="true"
+    android:contentDescription="@string/add_weight_desc"
+    android:src="@drawable/ic_remove_box_24px"/>
+
+</RelativeLayout>

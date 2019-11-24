@@ -1,63 +1,107 @@
 @startuml
 
 package "com.wlu.CP670.fort7350_Project" {
+
 class Exercise {
 String name
-String exerciseType
-String exerciseTarget
+EXERCISE_TYPE exerciseType
+EXERCISE_TARGET exerciseTarget
 ArrayList<Set> sets
-
-int getTotalWeight()
-int getTotalReps()
+URL videoLink
+DateTime timestamp
 }
-note top
-exerciseType - barbell, dumbell, machine, body weight, ...
-exerciseTarget - bicep, tricep, ...
 
-end note
 
-interface IExerciseList.Presenter{
+EXERCISE_TARGET -- Exercise
+EXERCISE_TYPE -- Exercise
+Set -- Exercise
+ExerciseData -- Exercise
+
+interface IExerciseList.Presenter <<interface>> {
     ArrayList<ExerciseList> getExerciseList(ExerciseFilter)
     openExerciseEditor(Exercise)
     stop();
 }
 
 
-interface IExerciseList.View{
+interface IExerciseList.View <<interface>> {
     displayExercisesByFilter(ExerciseFilter)
-    updateProgressBar(int);
+    updateProgressBar(int)
     showExerciseEditor(Exercise)
 }
 
+interface IExerciseData.Presenter <<interface>> {
+    int addExercise(Exercise)
+    Exercise getLastExercise()
+    int deleteExercise(Exercise)
+    int getExerciseByDate(DATE_RANGE)
+    int updateExercise(Exercise)
+}
+
+interface IExerciseData.View <<interface>> {
+    displaySetData(Exercise)
+}
+
+enum EXERCISE_TYPE {
+    FREEWEIGHT
+    MACHINE
+    BODYWEIGHT
+    RESISTANCE
+}
+
+ENUM EXERCISE_TARGET {
+    BICEP
+    TRICEP
+    FOREARM
+    WRIST
+    FRONT_DELTOID
+    REAR_DELTOID
+    SIDE_DELTOID
+    TRAPEZIUS
+    LOWER_BACK
+    UPPER_BACK
+    LATS
+    HAMSTRING
+    QUADRICEP
+    CALF
+    GLUTEUS
+}
+
 enum ExerciseFilter{
+    TYPE
+    TARGET
+}
+
+enum ExerciseDetailFilter{
     TYPE
     TARGET
     DATE_RANGE
 }
 
 class Set{
-int weight
+int weight_lbs
 int reps
+int orderNumber
+
+int addWeight()
+int deleteWeight()
 }
 
-AsyncTask <|-- ExerciseQuery
-class ExerciseQuery{
-String category
-String name
-URL videoLink
+AsyncTask <|-- ExerciseData
+ExerciseData <|--- IExerciseData
 
-URL getVideoLink()
-String getName()
-String getCategory()
+class ExerciseData{
+    Exercise exercise
+
+    Exercise getLastExerciseData()
+    addExercise(Exercise)
+    getExerciseDataByDate()
 }
 
-class Weight{
-int starting
-int current
-LocalDate startDate
-LocalDateTime lastUpdate
-
+enum MEASUREMENT_UNIT{
+    KGS
+    LBS
 }
 
-}
+
 @enduml

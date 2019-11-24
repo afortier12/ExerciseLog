@@ -1,0 +1,9 @@
+package wlu.cp670.fort7350_project.Utils;
+
+public enum ExerciseTarget {
+    BICEP, TRICEP, FOREARM, WRIST,
+    FRONT_DELTOID, REAR_DELTOID, SIDE_DELTOID, TRAPEZIUS,
+    LOWER_BACK, LATS, UPPER_BACK,
+    HAMSTRING, QUADRICEPS, CALF, GLUTEOUS
+}
+

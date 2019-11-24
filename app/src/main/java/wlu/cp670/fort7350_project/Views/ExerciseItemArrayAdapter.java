@@ -1,5 +1,6 @@
 package wlu.cp670.fort7350_project.Views;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,17 +19,24 @@ public class ExerciseItemArrayAdapter extends RecyclerView.Adapter<ExerciseItemA
 
     private int listItemLayout;
     private ArrayList<ExerciseListItem> itemList;
+    private Context context;
+    private ExerciseListFragment.OnExerciseItemSelectedListener listener;
+    private final static String TAG = "ExerciseItem_Adapter";
 
-    public ExerciseItemArrayAdapter(int layoutID, ArrayList<ExerciseListItem> itemList) {
-        this.listItemLayout = layoutID;
+
+    public ExerciseItemArrayAdapter(Context context, ArrayList<ExerciseListItem> itemList, ExerciseListFragment.OnExerciseItemSelectedListener listener) {
+        this.context = context;
         this.itemList = itemList;
+        this.listener = listener;
+
     }
 
     @NonNull
     @Override
     public ExerciseItemArrayAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(listItemLayout, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
+        Log.d(TAG, "In onCreateViewHolder");
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.exercise_item, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view, itemList, listener);
 
         return viewHolder;
     }
@@ -36,7 +44,12 @@ public class ExerciseItemArrayAdapter extends RecyclerView.Adapter<ExerciseItemA
     @Override
     public void onBindViewHolder(@NonNull ExerciseItemArrayAdapter.ViewHolder holder, int position) {
         TextView item = holder.item;
+        TextView type = holder.type;
+        TextView target = holder.target;
+
         item.setText(itemList.get(position).getName());
+        type.setText(itemList.get(position).getExerciseType());
+        target.setText(itemList.get(position).getExerciseTarget());
     }
 
     @Override
@@ -46,17 +59,32 @@ public class ExerciseItemArrayAdapter extends RecyclerView.Adapter<ExerciseItemA
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView item;
+        public TextView type;
+        public TextView target;
+        private Context context;
+        private ExerciseListFragment.OnExerciseItemSelectedListener listener;
+        private ArrayList<ExerciseListItem> itemList;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, ArrayList<ExerciseListItem> itemList, ExerciseListFragment.OnExerciseItemSelectedListener listener) {
             super(itemView);
             item = itemView.findViewById(R.id.exerciseItem);
+            type = itemView.findViewById(R.id.exerciseType);
+            target = itemView.findViewById(R.id.exerciseTarget);
+
+            context = itemView.getContext();
+            this.itemList = itemList;
+            this.listener = listener;
 
             itemView.setOnClickListener(this);
         }
 
+
         @Override
         public void onClick(View view) {
             Log.d("onclick", "onClick " + getLayoutPosition() + " " + item.getText());
+            int itemPosition = getLayoutPosition();
+            listener.onExerciseItemSelected(itemPosition, itemList);
         }
     }
+
 }

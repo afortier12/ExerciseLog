@@ -6,28 +6,41 @@
 left to right direction
 
 rectangle exercises {
-(Log data) as (Log)
+(Log time) as (Log)
 (View History) as (history)
 (Browse Exercises) as (browse)
 (Select Exercise) as (select)
+(Add set) as (add_set)
+(Add exercise) as (add_ex)
+(Add weight) as (weight_add)
+(Add reps) as (reps_add)
 (Start Timer) as (start)
 
 
 user -- (browse)
+user --(add_ex)
 user -- (select)
-user - (start)
+user -- (add_set)
+user -- (start)
 
 
 (select) <|-- (history)
-(select) <|-- (Log)
 
+(add_set) -l-|> (select)
+(add_set) <|-- (Log)
+(add_set) <|-- (weight_add)
+(add_set) <|-- (reps_add)
 
-Timer <. (start)
-Timer ..> (Log)
+:Timer: <.d. (start)
+:Timer: ..> (Log)
 
 (browse) ---- xml
+(add_ex) ----xml
+(add_ex) ---- Db
 (history) -- Db
 (Log) -- Db
+(weight_add) -- Db
+(reps_add) -- Db
 }
 
 rectangle tools{

@@ -5,11 +5,14 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "wlu.cp670.fort7350_project"
-        minSdkVersion 19
+        minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables{
+            useSupportLibrary = true
+        }
     }
     buildTypes {
         release {
@@ -21,6 +24,13 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
 }
 
 dependencies {
@@ -28,10 +38,16 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
+    testImplementation 'org.mockito:mockito-core:2.6.3'
+
+    androidTestImplementation 'org.mockito:mockito-core:1.10.19'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.ext:truth:1.2.0'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'com.google.android.material:material:1.0.0'
 }

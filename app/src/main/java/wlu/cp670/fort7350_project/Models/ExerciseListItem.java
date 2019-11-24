@@ -1,6 +1,5 @@
 package wlu.cp670.fort7350_project.Models;
 
-import wlu.cp670.fort7350_project.Utils.ExerciseFilter;
 
 public class ExerciseListItem {
 
@@ -16,6 +15,7 @@ public class ExerciseListItem {
         this.exerciseTarget = exerciseTarget;
         this.exerciseType = exerciseType;
     }
+
 
     public String getName() {
         return name;
@@ -49,4 +49,5 @@ public class ExerciseListItem {
                 ", exerciseType='" + exerciseType + '\'' +
                 '}';
     }
+
 }
