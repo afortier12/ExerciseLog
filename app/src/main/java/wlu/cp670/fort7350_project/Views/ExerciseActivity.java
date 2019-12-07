@@ -1,6 +1,7 @@
 package wlu.cp670.fort7350_project.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.appcompat.widget.Toolbar;
@@ -14,7 +15,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import wlu.cp670.fort7350_project.Models.Exercise;
 import wlu.cp670.fort7350_project.Models.ExerciseListItem;
@@ -24,15 +30,16 @@ import wlu.cp670.fort7350_project.Presenter.ExerciseList;
 import wlu.cp670.fort7350_project.Presenter.IExerciseData;
 import wlu.cp670.fort7350_project.Presenter.IExerciseList;
 import wlu.cp670.fort7350_project.R;
+import wlu.cp670.fort7350_project.Utils.ExerciseFilter;
 
 public class ExerciseActivity extends AppCompatActivity implements
-        IExerciseList.View, IExerciseData.View,
-        ExerciseListFragment.OnExerciseItemSelectedListener,
-        ActivityListener {
+        IExerciseList.View, IExerciseData.View, IExerciseData.View.History,
+        FragmentListener {
 
     private static final String TAG = "Main Activity";
     private static final String LIST_FRAGMENT_TAG = "LIST_FRAGMENT";
-    private static final String DETAIL_FRAGMENT_TAG = "DETAIL_FRAGMENT";
+    private static final String DATA_FRAGMENT_TAG = "DETAIL_FRAGMENT";
+    private static final String HISTORY_FRAGMENT_TAG = "HISTORY_FRAGMENT";
     private static final String DETAIL_ITEM_ARG = "DETAIL_ITEM";
     private static final String DETAIL_EXISTS_ARG = "DETAIL_EXITS";
 
@@ -40,6 +47,9 @@ public class ExerciseActivity extends AppCompatActivity implements
     private ExerciseData exerciseDataPresenter;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
+    private ExerciseListFragment exerciseListFragment;
+    private ExerciseDataFragment exerciseDataFragment;
+    private ExerciseHistoryFragment exerciseHistoryFragment;
 
     private ProgressBar progressBar;
     private TextView loadingText;
@@ -53,7 +63,7 @@ public class ExerciseActivity extends AppCompatActivity implements
 
         if (savedInstanceState == null) {
             // Instance of first fragment
-            ExerciseListFragment exerciseListFragment = new ExerciseListFragment();
+            exerciseListFragment = new ExerciseListFragment();
             fragmentManager = getSupportFragmentManager();
 
             fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
@@ -70,6 +80,21 @@ public class ExerciseActivity extends AppCompatActivity implements
             fragmentTransaction.commit();
         }
 
+        /*
+
+        /To add an item
+toolbar.getMenu().add(Menu.NONE,FIRST_ID,Menu.NONE,R.string.placeholder1);
+toolbar.getMenu().add(Menu.NONE,SECOND_ID,Menu.NONE,R.string.placeholder2);
+
+//and to remove a element just remove it with id
+toolbar.getMenu().removeItem(FIRST_ID);/To add an item
+toolbar.getMenu().add(Menu.NONE,FIRST_ID,Menu.NONE,R.string.placeholder1);
+toolbar.getMenu().add(Menu.NONE,SECOND_ID,Menu.NONE,R.string.placeholder2);
+
+//and to remove a element just remove it with id
+toolbar.getMenu().removeItem(FIRST_ID);
+         */
+
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         loadingText = (TextView) findViewById(R.id.loadingText);
 
@@ -77,6 +102,14 @@ public class ExerciseActivity extends AppCompatActivity implements
         appToolbar = (Toolbar) findViewById(R.id.app_toolbar);
         setSupportActionBar(appToolbar);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (fragmentManager.getFragments().size() == 1){
+            finish();
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -91,9 +124,9 @@ public class ExerciseActivity extends AppCompatActivity implements
         Log.d(TAG, "In onStart()");
         exerciseListPresenter = new ExerciseList(getFilesDir().getAbsolutePath(), this);
         exerciseListPresenter.loadDefaults(getApplicationContext());
-        exerciseListPresenter.getExerciseList();
+        exerciseListPresenter.readExerciseListFromFile();
 
-        exerciseDataPresenter = new ExerciseData(this, this.getApplicationContext());
+        exerciseDataPresenter = new ExerciseData(this, this, this.getApplicationContext());
         super.onStart();
     }
 
@@ -124,7 +157,7 @@ public class ExerciseActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_activity_actions, menu);
+        inflater.inflate(R.menu.toolbar_actions, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -133,15 +166,29 @@ public class ExerciseActivity extends AppCompatActivity implements
         int id = menuItem.getItemId();
         if (id == R.id.action_filter) {
             Log.d(TAG, "filter selected");
-        } else if (id == R.id.action_edit) {
+            exerciseListFragment.displayFilterDialog();
 
-        } else if (id == R.id.action_settings) {
+        } else if (id == R.id.action_list) {
 
-        } else {
+        } else if (id == R.id.action_tools) {
+
+        } else if (id == R.id.action_history){
+            Log.d(TAG, "history selected");
+            Fragment fragment = fragmentManager.findFragmentByTag(DATA_FRAGMENT_TAG);
+            if (fragment != null) {
+                if (fragment.isVisible()){
+                    displayHistoryData(exerciseDataFragment.getExercise());
+                } else{
+                    //launch history activity
+                }
+            }
+        }else {
 
         }
         return super.onOptionsItemSelected(menuItem);
     }
+
+
 
     @Override
     public void updateProgressBar(int value) {
@@ -157,41 +204,22 @@ public class ExerciseActivity extends AppCompatActivity implements
     @Override
     public void displayExerciseList(ArrayList<ExerciseListItem> exerciseList) {
 
-        ExerciseListFragment exerciseListFragment =
-                (ExerciseListFragment) getSupportFragmentManager().findFragmentByTag(LIST_FRAGMENT_TAG);
-
-        if (exerciseListFragment != null) {
+        if (exerciseListFragment != null)
             exerciseListFragment.displayList(exerciseList);
-        }
 
     }
 
     @Override
-    public void onExerciseItemSelected(int position, ArrayList<ExerciseListItem> exerciseList) {
-        Log.d(TAG, "In onExerciseItemSelected");
-
-        ExerciseListItem exerciseListItem = exerciseList.get(position);
-
-
-        //check if exercise data exists in database
-        boolean exists = exerciseDataPresenter.checkLastExercise(exerciseListItem.getName());
-        Exercise exercise = new Exercise(exerciseListItem.getName(),
-                exerciseListItem.getExerciseType(), exerciseListItem.getExerciseTarget());
-
-        displayExerciseData(exercise, exists);
-
-    }
-
-    @Override
-    public void displayFilteredExerciseList(ArrayList<ExerciseListItem> exerciseList) {
-
+    public void updateExerciseList(ArrayList<ExerciseListItem> exerciseList) {
+        if (exerciseListFragment != null)
+            exerciseListFragment.updateList(exerciseList);
     }
 
     @Override
     public void displayExerciseData(Exercise exercise, boolean exists) {
 
         //create ExerciseDataFragment object
-        ExerciseDataFragment exerciseDataFragment = new ExerciseDataFragment();
+        exerciseDataFragment = new ExerciseDataFragment();
 
         //create Bundle with selected item
         Bundle args = new Bundle();
@@ -203,36 +231,84 @@ public class ExerciseActivity extends AppCompatActivity implements
         //TODO
         // add condition for dual fragment layout
 
-        getSupportFragmentManager()
+        fragmentManager
                 .beginTransaction()
-                .add(R.id.flContainer, exerciseDataFragment, DETAIL_FRAGMENT_TAG)
+                .add(R.id.flContainer, exerciseDataFragment, DATA_FRAGMENT_TAG)
                 .addToBackStack(null)
                 .commit();
 
     }
 
+
+
     @Override
-    public int addSet(Set set) {
-        return 0;
+    public void onExerciseSetDataAdded(boolean status) {
+
+        exerciseDataFragment.notifySetAddStatus(status, fragmentManager);
+
     }
 
     @Override
-    public int updateSet(Set set) {
-        return 0;
+    public void onGetLastExerciseComplete(Exercise exercise) {
+
+        exerciseDataFragment.notifyLastExerciseFound(exercise);
+
     }
 
     @Override
-    public int deleteSet(Set set) {
-        return 0;
+    public void displayHistoryData(Exercise exercise) {
+        //create ExerciseDataFragment object
+        exerciseHistoryFragment = new ExerciseHistoryFragment();
+
+        //create Bundle with selected item
+        Bundle args = new Bundle();
+        args.putString(DETAIL_ITEM_ARG, exercise.getName());
+        //pass Bundle to fragment
+        exerciseHistoryFragment.setArguments(args);
+
+        //TODO
+        // add condition for dual fragment layout
+
+        fragmentManager
+                .beginTransaction()
+                .add(R.id.flContainer, exerciseHistoryFragment, HISTORY_FRAGMENT_TAG)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override
-    public void onExerciseSetSelected(int position, ArrayList<Set> exerciseSetItems) {
+    public void onHistoryFound(ArrayList<Set> displayList) {
+        exerciseHistoryFragment.updateHistoryList(displayList);
+    }
 
+    @Override
+    public void addSet(Set set) {
+
+    }
+
+    @Override
+    public void updateSet(Set set) {
+
+    }
+
+    @Override
+    public void deleteSet(Set set) {
+
+    }
+
+
+    /**
+     * Implementation of onSaveExercise of FragmentListener
+     * Called by ExerciseDataFragment
+     * @param exercise
+     */
+    @Override
+    public void onSaveExercise(Exercise exercise) {
+        exerciseDataPresenter.addExerciseSetData(exercise);
     }
 
     /**
-     * Implementation of onGetLastData of ActivityListener
+     * Implementation of onGetLastData of FragmentListener
      * fragment request of exercise data from last workout
      * @param exercise
      */
@@ -240,6 +316,40 @@ public class ExerciseActivity extends AppCompatActivity implements
     public void onGetLastData(Exercise exercise) {
         exerciseDataPresenter.getLastExerciseData(exercise);
     }
+
+    @Override
+    public void onExerciseItemSelected(ExerciseListItem exerciseListItem) {
+        //check if exercise data exists in database
+        boolean exists = exerciseDataPresenter.checkLastExercise(exerciseListItem.getName());
+        Exercise exercise = new Exercise(exerciseListItem.getName(),
+                exerciseListItem.getExerciseType(), exerciseListItem.getExerciseTarget());
+
+        displayExerciseData(exercise, exists);
+    }
+
+    @Override
+    public void onFilterSelected(Map<ExerciseFilter, String> filter) {
+        exerciseListPresenter.filterExerciseList(filter);
+    }
+
+    @Override
+    public void onClearFilter() {
+        exerciseListPresenter.clearExerciseListFilter();
+    }
+
+    @Override
+    public void onSearchHistory(String exerciseName, String startDate, String endDate) {
+
+        Map<ExerciseFilter, String> filter = new HashMap<>();
+
+        filter.put(ExerciseFilter.DATE_START, startDate);
+        filter.put(ExerciseFilter.DATE_END, endDate);
+
+        ArrayList<Set> list = new ArrayList<>();
+        exerciseDataPresenter.getExerciseByFilter(filter, exerciseName, list);
+
+    }
+
 
 }
 

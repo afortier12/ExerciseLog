@@ -1,14 +1,9 @@
 package wlu.cp670.fort7350_project.Presenter;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.Xml;
@@ -21,21 +16,19 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
-import wlu.cp670.fort7350_project.Models.DatabaseTables;
 import wlu.cp670.fort7350_project.Models.Exercise;
 import wlu.cp670.fort7350_project.Models.ExerciseListItem;
-import wlu.cp670.fort7350_project.R;
 import wlu.cp670.fort7350_project.Utils.ExerciseFilter;
-import wlu.cp670.fort7350_project.Utils.XMLValidator;
-import wlu.cp670.fort7350_project.Views.ExerciseDataFragment;
-import wlu.cp670.fort7350_project.Views.ExerciseListFragment;
 
 
 /*references:
@@ -60,8 +53,10 @@ public class ExerciseList implements IExerciseList.Presenter {
 
     private final IExerciseList.View view;
     private XMLParse xmlParse = null;
+    private boolean isRunning = false;
 
     private ArrayList<ExerciseListItem> exerciseList = null;
+    private ArrayList<ExerciseListItem> filteredList = null;
 
     //asset file names
     private static final String fileName = "exercises.xml";
@@ -86,7 +81,7 @@ public class ExerciseList implements IExerciseList.Presenter {
     }
 
 
-    public String getXmlSource() {
+    protected String getXmlSource() {
         return xmlSource;
     }
 
@@ -108,13 +103,51 @@ public class ExerciseList implements IExerciseList.Presenter {
         }
     }
 
-    public void getExerciseList(){
-        xmlParse = new XMLParse(this, view);
+    @Override
+  public void readExerciseListFromFile(){
+        xmlParse = new XMLParse(this, view, null);
         xmlParse.execute(xmlSource, fileName);
     }
 
     @Override
-    public void filterExerciseList(ExerciseFilter filter, String filterValue) {
+    public void filterExerciseList(Map<ExerciseFilter, String> filter) {
+
+        ArrayList<ExerciseListItem> tempList = new ArrayList<>(exerciseList);
+
+        for (Map.Entry<ExerciseFilter, String> entry : filter.entrySet()) {
+            filteredList = new ArrayList<>();
+            switch (entry.getKey()) {
+                case TARGET:
+                    for (ExerciseListItem item : tempList) {
+                        if (item.getExerciseTarget().equalsIgnoreCase(entry.getValue()))
+                            filteredList.add(new ExerciseListItem(item));
+                    }
+                    break;
+                case TYPE:
+                    for (ExerciseListItem item : tempList) {
+                        if (item.getExerciseType().equalsIgnoreCase(entry.getValue()))
+                            filteredList.add(new ExerciseListItem(item));
+                    }
+                    break;
+
+                default:
+                    break;
+
+            }
+            tempList = new ArrayList<>();
+            for (ExerciseListItem item: filteredList){
+                tempList.add(new ExerciseListItem(item));
+            }
+        }
+
+        view.updateExerciseList(filteredList);
+    }
+
+    @Override
+    public void clearExerciseListFilter() {
+
+        filteredList = new ArrayList<>(exerciseList);
+        view.updateExerciseList(filteredList);
 
     }
 
@@ -134,12 +167,6 @@ public class ExerciseList implements IExerciseList.Presenter {
         File file = new File(context.getFilesDir(), fileName);
         boolean existsFlag = file.exists();
 
-        if (existsFlag){
-            boolean deleteResult = context.deleteFile("exercise.xml");
-            String temp[] = context.fileList();
-            if (deleteResult) existsFlag = false;
-        }
-
         //default has not been loaded or file does not exist
         if (!existsFlag ){
             /* NOV4 removed sharedPreferences
@@ -153,21 +180,21 @@ public class ExerciseList implements IExerciseList.Presenter {
                 //get InputStream for default xml file
                 InputStream defaultXML = assetManager.open(fileName);
                 //get InputStream for xml schema
-                InputStream xmlSchema = assetManager.open(schemaFileName);
+                //InputStream xmlSchema = assetManager.open(schemaFileName);
 
                 FileOutputStream outputStream = context.openFileOutput(fileName, Context.MODE_PRIVATE);
                 copyDefaultToInternalStorage(defaultXML, outputStream);
 
-                InputStream inputStream = context.openFileInput(fileName);
+                //InputStream inputStream = context.openFileInput(fileName);
                 if (outputStream != null) outputStream.close();
                 if (defaultXML != null) defaultXML.close();
 
-                if (XMLValidator.againstSchema(schemaFileName, fileName, context)) {
-                } else {
-                    retVal = -1;
-                }
-                if (xmlSchema != null) xmlSchema.close();
-                if (inputStream != null) inputStream.close();
+                //if (XMLValidator.againstSchema(schemaFileName, fileName, context)) {
+                //} else {
+                //    retVal = -1;
+                //}
+                //if (xmlSchema != null) xmlSchema.close();
+                //if (inputStream != null) inputStream.close();
             }catch(Exception e) {
 
                 Log.e(TAG, "Error: default exercise list is missing. "
@@ -201,15 +228,40 @@ public class ExerciseList implements IExerciseList.Presenter {
 
     }
 
+    protected XMLParse getXmlParse() {
+        return xmlParse;
+    }
+
+    protected AsyncTask.Status getAsyncTaskState(){
+        return xmlParse.getStatus();
+    }
+
+    public ArrayList<ExerciseListItem> getExerciseList(){
+        return exerciseList;
+    }
+
+    public ArrayList<ExerciseListItem> getFilteredList() {
+        return filteredList;
+    }
+
+    protected void setExerciseList(ArrayList<ExerciseListItem> exerciseList) {
+        this.exerciseList = exerciseList;
+    }
 
 
     protected static class XMLParse extends AsyncTask<String, Integer, ArrayList<ExerciseListItem>> {
         private final IExerciseList.Presenter presenter;
         private final IExerciseList.View view;
+        private Listener listener;
 
-        public XMLParse(ExerciseList presenter, IExerciseList.View view) {
+        public XMLParse(ExerciseList presenter, IExerciseList.View view, Listener listener) {
             this.presenter = presenter;
             this.view = view;
+            this.listener = listener;
+        }
+
+        public interface Listener {
+            void onComplete(ArrayList<ExerciseListItem> result);
         }
 
         @Override
@@ -240,8 +292,8 @@ public class ExerciseList implements IExerciseList.Presenter {
                             Log.i(TAG, "End document");
                         } else if (eventType == XmlPullParser.START_TAG) {
                             if (parser.getName().equalsIgnoreCase("exercise")){
-                                exercise = new ExerciseListItem();
-                                exercise.setName(parser.getAttributeValue(null, "name"));
+                                exercise = new ExerciseListItem(parser.getAttributeValue
+                                        (null, "name"), "", "");
                             }
                             Log.i(TAG, "Start tag: " + parser.getName());
                         } else if (eventType == XmlPullParser.END_TAG) {
@@ -290,6 +342,7 @@ public class ExerciseList implements IExerciseList.Presenter {
                 view.showProgressBar(View.INVISIBLE);
                 view.displayExerciseList(exerciseList);
             }
+            if (listener != null) listener.onComplete(exerciseList);
             super.onPostExecute(exerciseList);
         }
 
@@ -298,6 +351,7 @@ public class ExerciseList implements IExerciseList.Presenter {
             int progressPercent = (int) (values[0]*100/values[1]);
             view.updateProgressBar(progressPercent);
         }
+
 
 
     }

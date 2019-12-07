@@ -1,9 +1,41 @@
 package wlu.cp670.fort7350_project.Utils;
 
+import androidx.annotation.NonNull;
+
 public enum ExerciseTarget {
-    BICEP, TRICEP, FOREARM, WRIST,
-    FRONT_DELTOID, REAR_DELTOID, SIDE_DELTOID, TRAPEZIUS,
-    LOWER_BACK, LATS, UPPER_BACK,
+    BICEPS, TRICEPS, FOREARMS, WRISTS,
+    FRONT_DELTOIDS{
+        @NonNull
+        @Override
+        public String toString() {
+            return "FRONT DELTOIDS";
+        }
+    }, REAR_DELTOIDS{
+        @NonNull
+        @Override
+        public String toString() {
+            return "REAR DELTOIDS";
+        }
+    }, SIDE_DELTOID{
+        @NonNull
+        @Override
+        public String toString() {
+            return "SIDE DELTOIDS";
+        }
+    }, TRAPEZIUS,
+    LOWER_BACK{
+        @NonNull
+        @Override
+        public String toString() {
+            return "LOWER BACK";
+        }
+    }, LATS, UPPER_BACK{
+        @NonNull
+        @Override
+        public String toString() {
+            return "UPPER BACK";
+        }
+    },
     HAMSTRING, QUADRICEPS, CALF, GLUTEOUS
 }
 

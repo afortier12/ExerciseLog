@@ -4,6 +4,7 @@ import android.content.Context;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Map;
 
 import wlu.cp670.fort7350_project.Models.Exercise;
 import wlu.cp670.fort7350_project.Models.ExerciseListItem;
@@ -13,8 +14,9 @@ public interface IExerciseList {
 
     public interface Presenter{
         int loadDefaults(Context context);
-        void getExerciseList();
-        void filterExerciseList(ExerciseFilter filter, String filterValue);
+        void readExerciseListFromFile();
+        void filterExerciseList(Map<ExerciseFilter, String> filter);
+        void clearExerciseListFilter();
         void updateExerciseList(ArrayList<ExerciseListItem> exerciseList);
         void stop();
     }
@@ -23,7 +25,7 @@ public interface IExerciseList {
         void updateProgressBar(int value);
         void showProgressBar(int value);
         void displayExerciseList(ArrayList<ExerciseListItem> exerciseList);
-        void displayFilteredExerciseList(ArrayList<ExerciseListItem> exerciseList);
+        void updateExerciseList(ArrayList<ExerciseListItem> exerciseList);
 
     }
 }

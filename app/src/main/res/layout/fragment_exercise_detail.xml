@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
     android:background="@color/colorBodyDark">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,24 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-                <ProgressBar
-                    android:id="@+id/progressBar_cyclic"
-                    android:visibility="invisible"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minHeight="50dp"
-                    android:minWidth="50dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
 
                 <androidx.constraintlayout.widget.Guideline
                     android:id="@+id/guideline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.5" />
+                    app:layout_constraintGuide_percent="0.6" />
 
                 <TextView
                     android:id="@+id/title"
@@ -215,16 +206,34 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/repsEditText" />
 
-                <ListView
-                    android:id="@+id/setList"
+
+                <Space
+                    android:id="@+id/space_vertical"
                     android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_marginTop="@dimen/default_margin"
-                    android:scrollbars="vertical"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_height="20dp"
+                    android:orientation="vertical"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/save_set_button" />
+
+                <FrameLayout
+                    android:id="@+id/list_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:background="@color/colorBodyDark"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/space_vertical">
+
+                        <ListView
+                            android:id="@+id/setList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/activity_margin"
+                            android:background="@android:color/white"
+                            android:scrollbars="vertical" />
+
+                </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -237,10 +246,9 @@
             android:src="@drawable/ic_check_24px"
             android:backgroundTint="@color/colorAccent"
             style="@style/buttonIcon"
-            app:useCompatPadding="false"
-            app:layout_anchor="@id/setList"
+            app:layout_anchor="@id/list_container"
             app:layout_anchorGravity="bottom|end"
-
-            app:fabSize="mini"/>
+            app:useCompatPadding="false"
+            app:fabSize="normal"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

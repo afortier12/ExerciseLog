@@ -24,4 +24,25 @@
     <string name="ok">ok</string>
     <string name="save_exercise">Completed</string>
     <string name="exercise_exists">Dou you want to use the set data from your last workout?</string>
+    <string name="delete_set_description">Delete set</string>
+    <string name="placeholder">placeholder</string>
+    <string name="set_label">Set#</string>
+    <string name="exercise_added_success">Exercise added successfully</string>
+    <string name="exercise_added_fail">Exercise add failed!</string>
+    <string name="yes">YES</string>
+    <string name="no">NO</string>
+    <string name="list_filter_dialog_title">Filter Exercise List</string>
+    <string name="start_date_description">Select start date</string>
+    <string name="start_label">Start Date:</string>
+    <string name="date_hint">DD/MM/YYYY</string>
+    <string name="enter_start_date">Enter start date</string>
+    <string name="end_label">End Date:</string>
+    <string name="enter_end_date">Enter end date</string>
+    <string name="end_date_description">Select End Date</string>
+    <string name="date_label">Date</string>
+    <string name="search_history">Search</string>
+    <string name="action_tools">Tools</string>
+    <string name="action_history">History</string>
+    <string name="summary">Summary</string>
+    <string name="target_header">Muscle Group</string>
 </resources>

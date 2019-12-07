@@ -7,7 +7,10 @@ public class ExerciseListItem {
     private String exerciseTarget = "";   //target muscle group eg) Bicep, Hamstring, ..
     private String exerciseType = ""; //eg) barbell, dumbell, ...
 
-    public ExerciseListItem() {
+    public ExerciseListItem(ExerciseListItem item) {
+        this.name = item.name;
+        this.exerciseTarget = item.exerciseTarget;
+        this.exerciseType = item.exerciseType;
     }
 
     public ExerciseListItem(String name, String exerciseTarget, String exerciseType) {

@@ -26,21 +26,21 @@ import wlu.cp670.fort7350_project.R;
 
 public class ExerciseSetArrayAdapter extends BaseAdapter {
 
-    private int setRowLayout;
     private ArrayList<Set> setList;
     private FragmentActivity context;
     private final static String TAG = "ExerciseSet_Adapter";
+    private View.OnClickListener listener;
 
     private ImageButton deleteSetButton;
-    private ImageButton editSetButton;
     private TextView setNumber;
     private TextView setReps;
     private TextView setWeight;
 
 
-    public ExerciseSetArrayAdapter(FragmentActivity context, ArrayList<Set> setList) {
+    public ExerciseSetArrayAdapter(FragmentActivity context, ArrayList<Set> setList, View.OnClickListener listener) {
         this.context = context;
         this.setList = setList;
+        this.listener = listener;
 
     }
 
@@ -83,14 +83,11 @@ public class ExerciseSetArrayAdapter extends BaseAdapter {
         setReps.setText(String.valueOf(setList.get(position).getReps()));
         setWeight.setText(String.valueOf(setList.get(position).getWeight()));
 
-        deleteSetButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                setList.remove(position);
-                notifyDataSetChanged();
-            }
-        });
+        deleteSetButton.setOnClickListener(listener);
 
         return convertView;
     }
+
+
+
 }

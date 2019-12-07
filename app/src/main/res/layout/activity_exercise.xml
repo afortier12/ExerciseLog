@@ -3,9 +3,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/activity_margin"
     android:paddingTop="@dimen/activity_margin"
-    android:paddingRight="@dimen/activity_margin"
     android:paddingBottom="@dimen/activity_margin">
 
 

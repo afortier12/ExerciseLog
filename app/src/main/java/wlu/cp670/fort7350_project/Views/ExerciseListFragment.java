@@ -1,14 +1,24 @@
 package wlu.cp670.fort7350_project.Views;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -16,30 +26,37 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import wlu.cp670.fort7350_project.Models.ExerciseListItem;
 import wlu.cp670.fort7350_project.R;
+import wlu.cp670.fort7350_project.Utils.ExerciseFilter;
+import wlu.cp670.fort7350_project.Utils.ExerciseTarget;
+import wlu.cp670.fort7350_project.Utils.ExerciseType;
 
 /*
     references:
         https://guides.codepath.com/android/Creating-and-Using-Fragments#fragment-listener
+        https://www.tutorialspoint.com/how-can-i-add-items-to-a-spinner-in-android
  */
 
-public class ExerciseListFragment extends Fragment{
+public class ExerciseListFragment extends Fragment {
 
-    private OnExerciseItemSelectedListener listener;
+    private FragmentListener listener;
     private ExerciseItemArrayAdapter exerciseItemArrayAdapter;
-    RecyclerView recyclerView;
+    private ArrayList<ExerciseListItem> displayList;
+    private RecyclerView recyclerView;
     private static final String TAG = "ExerciseListFragment";
 
-    //listener to detect when item selected
-    public interface OnExerciseItemSelectedListener {
-        public void onExerciseItemSelected(int position, ArrayList<ExerciseListItem> exerciseListItems);
-    }
+
 
     public void displayList(ArrayList<ExerciseListItem> exerciseList){
 
-        exerciseItemArrayAdapter = new ExerciseItemArrayAdapter(getActivity(), exerciseList, listener);
+        displayList = new ArrayList<>(exerciseList);
+        exerciseItemArrayAdapter = new ExerciseItemArrayAdapter(getActivity(), displayList,
+                new OnExerciseItemSelectedListener());
 
         recyclerView = (RecyclerView) getActivity().findViewById(R.id.recyclerViewExerciseList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -48,12 +65,124 @@ public class ExerciseListFragment extends Fragment{
         recyclerView.setAdapter(exerciseItemArrayAdapter);
     }
 
+    public void updateList(ArrayList<ExerciseListItem> exerciseList){
+        displayList.clear();
+        displayList.addAll(exerciseList);
+        exerciseItemArrayAdapter.notifyDataSetChanged();
+    }
+
+    public void displayFilterDialog(){
+
+        LayoutInflater layoutInflater = requireActivity().getLayoutInflater();
+        final View filterDialog = layoutInflater.inflate(R.layout.filter_dialog, null);
+
+        Spinner typeSelect = filterDialog.findViewById(R.id.type_filter);
+        setUpTypeFilter(typeSelect);
+
+        Spinner targetSelect = filterDialog.findViewById(R.id.target_filter);
+        setUpTargetFilter(targetSelect);
+
+        AlertDialog.Builder builderCustom = new AlertDialog.Builder(this.getContext());
+        AlertDialog alertDialog =  builderCustom.setView(filterDialog)
+                // Add action buttons
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Map<ExerciseFilter, String> filter = new HashMap<>();
+
+                        String typeValue = (String) typeSelect.getSelectedItem();
+                        if(typeValue.length() > 0  && !(typeValue.equalsIgnoreCase("ALL"))){
+                            filter.put(ExerciseFilter.TYPE, typeValue);
+                        }
+
+                        String targetValue =  (String) targetSelect.getSelectedItem();
+                        if(targetValue.length() > 0  && !(targetValue.equalsIgnoreCase("ALL"))){
+                            filter.put(ExerciseFilter.TARGET, targetValue);
+                        }
+
+                        if (filter.size()>0)
+                            listener.onFilterSelected(filter);
+                        else
+                            listener.onClearFilter();
+
+                    }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                })
+                .create();
+
+        int  displayMetrics = (int)getContext().getResources().getDisplayMetrics().density;
+        TextView dialogTitle = new TextView(this.getContext());
+        dialogTitle.setText(R.string.list_filter_dialog_title);
+        dialogTitle.setTextColor(getResources().getColor(R.color.colorPrimary));
+        dialogTitle.setTextSize(20F);
+        int pad  = 30 * displayMetrics;
+        dialogTitle.setPadding(pad, pad, pad, pad);
+
+        alertDialog.setCustomTitle(dialogTitle);
+        alertDialog.show();
+    }
+
+    private void setUpTypeFilter(Spinner typeSelect){
+
+        typeSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                parent.setSelection(position);
+                ((TextView) parent.getSelectedView()).setTextColor(Color.BLACK);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        ArrayList<String> typeList = new ArrayList<>();
+        typeList.add("ALL");
+        for (ExerciseType type: ExerciseType.values())
+            typeList.add(type.toString());
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(getActivity(),
+                R.layout.support_simple_spinner_dropdown_item,typeList);
+        typeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        typeSelect.setAdapter(typeAdapter);
+    }
+
+
+    private void setUpTargetFilter(Spinner targetSelect){
+
+        targetSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                parent.setSelection(position);
+                ((TextView) parent.getSelectedView()).setTextColor(Color.BLACK);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        ArrayList<String> targetList = new ArrayList<>();
+        targetList.add("ALL");
+        for (ExerciseTarget target: ExerciseTarget.values())
+            targetList.add(target.toString());
+        ArrayAdapter<String> targetAdapter = new ArrayAdapter<>(getActivity(),
+                R.layout.support_simple_spinner_dropdown_item,targetList);
+        targetAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        targetSelect.setAdapter(targetAdapter);
+    }
+
+
     @Override
     public void onAttach(@NonNull Context context) {
         Log.d(TAG, "In onAttach()");
         super.onAttach(context);
-        if (context instanceof OnExerciseItemSelectedListener) {
-            listener = (OnExerciseItemSelectedListener) context;
+        if (context instanceof FragmentListener) {
+            listener = (FragmentListener) context;
         } else {
             throw new ClassCastException(context.toString()
                     + " must implement ExerciseList.OnItemSelectedListener");
@@ -120,5 +249,13 @@ public class ExerciseListFragment extends Fragment{
     public void onDetach() {
         Log.d(TAG, "In onDetach()");
         super.onDetach();
+    }
+
+    class OnExerciseItemSelectedListener implements ExerciseItemArrayAdapter.OnItemClickListener {
+
+        @Override
+        public void onItemClick(ExerciseListItem exerciseListItem) {
+            listener.onExerciseItemSelected(exerciseListItem);
+        }
     }
 }

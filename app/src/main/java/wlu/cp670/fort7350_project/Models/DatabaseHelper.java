@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import androidx.annotation.VisibleForTesting;
+
 import wlu.cp670.fort7350_project.Utils.ExerciseTarget;
 import wlu.cp670.fort7350_project.Utils.ExerciseType;
 
@@ -17,8 +19,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
     private static final String DATABASE_NAME = "exercise_log.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
+    @VisibleForTesting
     public DatabaseHelper(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -41,6 +44,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion){
+        database.execSQL("DROP TABLE IF EXISTS " + DatabaseTables.Exercise.TABLE_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + DatabaseTables.Sets.TABLE_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + DatabaseTables.Exercise_type.TABLE_NAME);
+        database.execSQL("DROP TABLE IF EXISTS " + DatabaseTables.Exercise_target.TABLE_NAME);
+        onCreate(database);
+    }
+
+    @Override
+    public void onDowngrade(SQLiteDatabase database, int oldVersion, int newVersion){
         database.execSQL("DROP TABLE IF EXISTS " + DatabaseTables.Exercise.TABLE_NAME);
         database.execSQL("DROP TABLE IF EXISTS " + DatabaseTables.Sets.TABLE_NAME);
         database.execSQL("DROP TABLE IF EXISTS " + DatabaseTables.Exercise_type.TABLE_NAME);

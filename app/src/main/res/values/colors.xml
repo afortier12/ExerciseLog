@@ -10,4 +10,5 @@
     <color name="type_text">#cccccc</color>
     <color name="list_text">#ffffff</color>
     <color name="button_text">#000000</color>
+    <color name="disable_color">#c0c0c0</color>
 </resources>

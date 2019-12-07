@@ -49,7 +49,8 @@
     android:layout_centerVertical="true"
     android:adjustViewBounds="true"
     android:contentDescription="@string/add_weight_desc"
-    android:src="@drawable/ic_add_box_24px"/>
+    android:src="@drawable/ic_add_box_24px"
+    style="@style/buttonIcon"/>
 
 <ImageButton
     android:id="@+id/dec_button"
@@ -59,7 +60,8 @@
     android:layout_marginStart="20dp"
     android:layout_centerVertical="true"
     android:adjustViewBounds="true"
-    android:contentDescription="@string/add_weight_desc"
-    android:src="@drawable/ic_remove_box_24px"/>
+    android:contentDescription="@string/remove_weight_desc"
+    android:src="@drawable/ic_remove_box_24px"
+    style="@style/buttonIcon"/>
 
 </RelativeLayout>
