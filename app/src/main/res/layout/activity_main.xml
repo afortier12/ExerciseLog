@@ -1,33 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
         layout="@layout/app_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0"/>
 
     <TextView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/default_margin"
+        android:layout_weight="0"
         android:gravity="start"
         android:padding="@dimen/default_margin"
         android:text="@string/summary"
         android:textColor="@android:color/white"
-        android:textSize="20sp"/>
+        android:textSize="20sp" />
 
     <ListView
         android:id="@+id/summaryList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/activity_margin"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin"
+        android:layout_marginEnd="@dimen/activity_margin"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:layout_weight="1"
         android:background="@android:color/white"
         android:scrollbars="vertical" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin"
+        android:layout_marginEnd="@dimen/activity_margin"
+        android:layout_marginBottom="@dimen/activity_margin"
+        android:layout_weight="0"
+        android:text="@string/select_exercise"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:onClick="onStartWorkout"/>
 
 
 </LinearLayout>

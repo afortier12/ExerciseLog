@@ -1,107 +1,592 @@
 @startuml
 
-package "com.wlu.CP670.fort7350_Project" {
+package "com.wlu.CP670.fort7350_Project.Model" {
 
-class Exercise {
-String name
-EXERCISE_TYPE exerciseType
-EXERCISE_TARGET exerciseTarget
-ArrayList<Set> sets
-URL videoLink
-DateTime timestamp
+    class Exercise {
+    private final IExerciseData.View view
+    private final IExerciseData.View.History view_history
+    private final IExerciseData.View.Summary view_summary
+    private DatabaseHelper dbHelper
+    private static final String TAG
+    }
+
+    class Set{
+    private double weight;
+    private int reps;
+    private int orderNumber;
+    private String dateTime;
+    }
+
+    class ExerciseListItem{
+    private String name
+    private String exerciseTarget
+    private String exerciseType
+    }
+
+    class DatabaseHelper{
+    private static final String TAG
+    private static final String DATABASE_NAME
+    private static final int DATABASE_VERSION
+
+    public void onCreate(SQLiteDatabase)
+    public void onUpgrade(SQLiteDatabase, int)
+    private void writeDefaultValue(SQLiteDatabase)
+    }
+
 }
 
+package "com.wlu.CP670.fort7350_Project.Presenter" {
+
+    class ExerciseData{
+    private final IExerciseData.View view
+    private final IExerciseData.View.History view_history
+    private final IExerciseData.View.Summary view_summary
+    private DatabaseHelper dbHelper
+    private static final String TAG
+
+    public ExerciseData(IExerciseData.View view, IExerciseData.View.History history, Context context)
+    public ExerciseData(IExerciseData.View.Summary view, Context context)
+    public void dbHelperClose()
+    protected boolean exerciseExists(SQLiteDatabase database, Exercise exercise)
+    protected int getExerciseId(SQLiteDatabase database, Exercise exercise)
+    protected int getTargetId(SQLiteDatabase database, Exercise exercise)
+    protected int getTypeId(SQLiteDatabase database, Exercise exercise)
+    private String getDateTime()
+    protected IExerciseData.View getView()
+    protected DatabaseHelper getDbHelper()
+    }
+
+
+    class ExerciseList{
+    private final IExerciseList.View view
+    private XMLParse xmlParse
+    private boolean isRunning
+    private ArrayList<ExerciseListItem> exerciseList
+    private ArrayList<ExerciseListItem> filteredList
+    private static final String fileName
+    private String xmlSource
+    private static final String TAG
+
+    public IExerciseList.View getView()
+    protected String getXmlSource()
+    public ExerciseList(String xmlSource, IExerciseList.View view)
+    public int loadDefaults(Context context)
+    private void copyDefaultToInternalStorage(InputStream defaultXML, FileOutputStream outputStream)
+    protected XMLParse getXmlParse()
+    protected AsyncTask.Status getAsyncTaskState
+    public ArrayList<ExerciseListItem> getExerciseList()
+    public ArrayList<ExerciseListItem> getFilteredList()
+    protected void setExerciseList(ArrayList<ExerciseListItem> exerciseList)
+    }
+
+    class XMLParse{
+    private final IExerciseList.Presenter presenter
+    private final IExerciseList.View view
+    private Listener listener
+
+    interface Listener <<interface>>{
+        onComplete(ArrayList<ExerciseListItem>
+    }
+
+
+    interface IExerciseList.Presenter <<interface>> {
+        loadDefaults(Context)
+        readExerciseListFromFile()
+        filterExerciseList(Map<ExerciseFilter, String>)
+        clearExerciseListFilter()
+        updateExerciseList(ArrayList<ExerciseListItem>)
+    }
+
+    interface IExerciseList.View <<interface>> {
+        updateProgressBar(int)
+        showProgressBar(int)
+        displayExerciseList(ArrayList<ExerciseListItem>)
+        updateExerciseList(ArrayList<ExerciseListItem>)
+
+    }
+
+    interface IExerciseData.Presenter <<interface>> {
+        boolean checkLastExercise(String)
+        getLastExerciseData(Exercise)
+        addExerciseSetData(Exercise)
+    }
+    interface IExerciseData.Presenter.History <<interface>>{
+        getExerciseByFilter(Map<ExerciseFilter, String>, String, ArrayList<Set>)
+    }
+    interface IExerciseData.Presenter.Summary <<interface>>{
+        int getSummaryData()
+    }
+
+    interface IExerciseData.View <<interface>> {
+        displayExerciseData(Exercise, boolean)
+        onExerciseSetDataAdded(boolean)
+        onGetLastExerciseComplete(Exercise)
+    }
+    interface IExerciseData.View.History <<interface>>{
+            displayHistoryData(Exercise)
+            onHistoryFound(ArrayList<Set>)
+    }
+    interface IExerciseData.View.Summary <<interface>>{
+            displaySummaryData(Cursor)
+    }
+
+
+}
+
+package "com.wlu.CP670.fort7350_Project.Utils"{
+    enum EXERCISE_TYPE {
+        BARBELL
+        DUMBELL
+        MACHINE
+        BODYWEIGHT
+        RESISTANCE
+    }
+
+    ENUM EXERCISE_TARGET {
+        BICEP
+        TRICEP
+        FOREARM
+        WRIST
+        FRONT_DELTOID
+        REAR_DELTOID
+        SIDE_DELTOID
+        TRAPEZIUS
+        LOWER_BACK
+        UPPER_BACK
+        LATS
+        HAMSTRING
+        QUADRICEP
+        CALF
+        GLUTEUS
+    }
+
+    enum ExerciseFilter{
+        TYPE
+        TARGET
+    }
+
+    enum ExerciseDetailFilter{
+        TYPE
+        TARGET
+        DATE_RANGE
+    }
+}
+
+package  "com.wlu.CP670.fort7350_Project.Views"{
+    class SummaryActivity{
+    public static final String TAG
+    public static final String COLUMN_DATE
+    public static final String COLUMN_TARGET
+    public static final String COLUMN_EXERCISE
+    public static final String COLUMN_WEIGHT
+    public static final String COLUMN_MAX_WEIGHT
+    public static final String COLUMN_MIN_WEIGHT
+    public static final String COLUMN_REPS
+    public static final String COLUMN_MAX_REPS
+    public static final String COLUMN_MIN_REPS
+    public static final int WRITE_REQUEST_CODE
+    ListView listView;
+    Toolbar appToolbar;
+    CursorAdapter summaryCursorAdapter
+    ExerciseData exerciseDataSummaryPresenter;
+    boolean showList
+    boolean showFilter
+    boolean showHistory
+
+    protected void onCreate(@Nullable Bundle)
+    protected void onStart()
+    protected void onStop()
+    protected void onDestroy()
+    public boolean onCreateOptionsMenu(Menu)
+    public boolean onOptionsItemSelected(@NonNull MenuItem)
+    public boolean onPrepareOptionsMenu(Menu)
+    public void onRequestPermissionsResult(int, String[], int[])
+    public void onStartWorkout(View)
+    }
+
+
+
+    class SummaryCursorAdapter {
+    private final static String TAG
+    private final static String TIMESTAMP_FORMAT_DB
+    private static final String DATE_FORMAT_DISPLAY
+    private String lastDate
+    private String lastTarget
+
+    public SummaryCursorAdapter(Context context, Cursor cursor, int flags)
+    public View newView(Context context, Cursor cursor, ViewGroup parent)
+    public void bindView(View view, Context context, Cursor cursor)
+    private String getDateFromString(String date)
+    }
+
+    class ImportExportActivity{
+    public static final String TAG
+    private static final String fileName
+    public static final int REQUEST_CODE_IMPORT
+    public static final int REQUEST_CODE_EXPORT
+    Toolbar appToolbar
+    InputStream importedStream
+    ProgressDialog progressDialog
+    private boolean showFilter
+    private boolean showHistory
+    private boolean showList
+
+    protected void onCreate(@Nullable Bundle)
+    protected void onStart()
+    protected void onStop()
+    protected void onDestroy()
+    public boolean onCreateOptionsMenu(Menu)
+    public boolean onOptionsItemSelected(@NonNull MenuItem)
+    public boolean onPrepareOptionsMenu(Menu)
+    protected void onActivityResult(int, int, Intent)
+    public void onExport(View)
+    public void onImport(View)
+    public String getFileName(Uri)
+    public void showProgressBar(int)
+    public void updateProgressBar(int, int)
+    public void displayResult(boolean)
+    private boolean copyImportedFile()
+
+    }
+
+    class XMLValidate{
+        private final IExerciseList.Presenter presenter
+        private final IExerciseList.View view
+        private Listener listener
+
+        interface Listener <<interface>>{
+            onComplete(ArrayList<ExerciseListItem>
+        }
+
+    class ProgressDialog{
+    TextView count
+    TextView total
+
+    public ProgressDialog(@NonNull Context)
+    protected void onCreate(Bundle)
+    public void updateCounts(int, int)
+    }
+
+    class ExerciseActivity{
+    private static final String TA
+    private static final String LIST_FRAGMENT_TAG
+    private static final String DATA_FRAGMENT_TA
+    private static final String HISTORY_FRAGMENT_TAG
+    private static final String DETAIL_ITEM_ARG
+    private static final String DETAIL_EXISTS_ARG
+    private ExerciseList exerciseListPresenter
+    private ExerciseData exerciseDataPresenter
+    private FragmentManager fragmentManager
+    private FragmentTransaction fragmentTransaction
+    private ExerciseListFragment exerciseListFragment
+    private ExerciseDataFragment exerciseDataFragment
+    private ExerciseHistoryFragment exerciseHistoryFragment
+    private ProgressBar progressBar
+    private TextView loadingText
+    private Toolbar appToolbar
+    private boolean showFilter
+    private boolean showHistory
+    private boolean showList
+
+    protected void onCreate(@Nullable Bundle)
+    protected void onStart()
+    protected void onStop()
+    protected void onDestroy()
+    protected void onPause()
+    protected void onRestart()
+    public boolean onCreateOptionsMenu(Menu)
+    public boolean onOptionsItemSelected(@NonNull MenuItem)
+    public boolean onPrepareOptionsMenu(Menu)
+    public void updateProgressBar(int)
+    public void displayExerciseList(ArrayList<ExerciseListItem>)
+    public void updateExerciseList(ArrayList<ExerciseListItem>)
+    public void displayExerciseData(Exercise, boolean)
+    public void onExerciseSetDataAdded(boolean)
+    public void onGetLastExerciseComplete(Exercise)
+    public void displayHistoryData(Exercise)
+    public void onHistoryFound(ArrayList<Set>)
+    public void onSaveExercise(Exercise)
+    public void onGetLastData(Exercise)
+    public void onExerciseItemSelected(ExerciseListItem)
+    public void onFilterSelected(Map<ExerciseFilter, String>)
+    public void onClearFilter()
+    public void onSearchHistory(String, String, String)
+    }
+
+    class FragmentBackStackListener{
+    public void onBackStackChanged()
+    }
+
+    interface FragmentListener <<interface>>{
+        onSaveExercise(Exercise)
+        onGetLastData(Exercise)
+        onExerciseItemSelected(ExerciseListItem)
+        onFilterSelected(Map<ExerciseFilter, String>)
+        onClearFilter()
+        onSearchHistory(String, String, String)
+    }
+
+    class ExerciseListFragment{
+    private FragmentListener listener
+    private ExerciseItemArrayAdapter exerciseItemArrayAdapter
+    private ArrayList<ExerciseListItem> displayList
+    private RecyclerView recyclerView
+    private static final String TAG
+
+    public void onAttach(Context)
+    public void onCreate(Bundle)
+    public View onCreateView(LayoutInflater, ViewGroup, Bundle)
+    public void onViewCreated(View, Bundle)
+    public void onActivityCreated(Bundle)
+    protected void onStart()
+    protected void onStop()
+    protected void onDestroy()
+    protected void onPause()
+    protected void onRestart()
+    }
+
+    class OnExerciseItemSelectedListener{
+    }
+
+    class ExerciseItemArrayAdapter{
+    private ArrayList<ExerciseListItem> itemList
+    private Context context
+    private OnItemClickListener listener
+    private final static String TAG
+
+    public ExerciseItemArrayAdapter(Context, ArrayList<ExerciseListItem>, OnItemClickListener)
+    public ViewHolder onCreateViewHolder(ViewGroup, int)
+    public void onBindViewHolder(ExerciseItemArrayAdapter.ViewHolder, int)
+    public int getItemCount()
+
+    class ViewHolder{
+    public ViewHolder(View)
+    public void bind(ExerciseListItem, OnItemClickListener)
+    }
+
+    interface OnItemClickListener <<interface>>{
+            void onItemClick(ExerciseListItem)
+     }
+
+    class ExerciseDataFragment{
+    private static final String TAG
+    private static final String DETAIL_ITEM_ARG
+    private static final String DETAIL_EXISTS_ARG
+    private static final double maxWeight
+    private static final double minWeight
+    private static final double weightMultiple
+    private static final int maxReps
+    private static final int minReps
+    private static final int repsMultiple
+    private Exercise exercise;
+    private boolean exercise_exists;
+    private ExerciseSetArrayAdapter exerciseSetArrayAdapter;
+    private FragmentListener listener;
+    private TextView title;
+    private TextView targetValue;
+    private TextView typeValue;
+    private EditText weightValue;
+    private EditText repsValue;
+    private ImageButton weightButton;
+    private ImageButton repsIncreaseButton;
+    private ImageButton repsDecreaseButton;
+    private Button saveSetButton;
+    private ProgressBarDialog progressBarDialog;
+    private ListView listView;
+    private FloatingActionButton saveExerciseButton;
+
+    public void onAttach(Context)
+    public void onCreate(Bundle)
+    public View onCreateView(LayoutInflater, ViewGroup, Bundle)
+    public void onViewCreated(View, Bundle)
+    public void onActivityCreated(Bundle)
+    protected void onStart()
+    protected void onStop()
+    protected void onDestroy()
+    protected void onPause()
+    protected void onRestart()
+    private void displayWeightDialog(View)
+    private void calculateTotalWeight(LinearLayout)
+    private void setButtonDisabledColorFilter(Button, boolean)
+    private boolean checkWeightField()
+    private boolean checkRepsField()
+    public void onClick(View
+    public void notifySetAddStatus(boolean, FragmentManager)
+    public void notifyLastExerciseFound(Exercise)
+    public Exercise getExercise()
+
+    }
+
+    class WeightDialogButtonClick{
+    }
+
+    class ValueChangeWatcher{
+    private Double max;
+    private Double min;
+    private Double multiple;
+    private boolean backspaceFlag
+
+    public ValueChangeWatcher(double, double, double)
+    public void beforeTextChanged(CharSequence, int, int, int)
+    public void onTextChanged(CharSequence, int, int, int)
+    public void afterTextChanged(Editable)
+
+    }
+
+    class NumberFilter{
+    private Double maxValue
+    private Double minValue
+    private Double multipleValue
+
+    public NumberFilter(Double, Double, Double)
+    public CharSequence filter(CharSequence, int, int, Spanned, int, int)
+    private boolean isInRange(Double)
+    private boolean isMultipleOf(Double)
+    }
+
+    class ExerciseSetArrayAdapter{
+    private ArrayList<Set> setList
+    private FragmentActivity context
+    private final static String TAG
+    private View.OnClickListener listener
+    private ImageButton deleteSetButton
+    private TextView setNumber
+    private TextView setReps
+    private TextView setWeight
+
+    public ExerciseSetArrayAdapter(FragmentActivity, ArrayList<Set>, View.OnClickListener)
+    public void updateList(ArrayList<Set>)
+    public int getCount()
+    public Object getItem(int)
+    public long getItemId(int)
+    public View getView(int, View, ViewGroup)
+    }
+
+    class ExerciseHistoryFragment{
+    private FragmentListener listener
+    private ExerciseHistoryArrayAdapter exerciseHistoryArrayAdapter
+    private ArrayList<Set> displayList
+    private RecyclerView recyclerView
+    private static final String TAG
+    private static final String DETAIL_ITEM_ARG
+    private static final String DATE_FORMAT_DISPLAY
+    private static final String DATE_FORMAT_DB
+    TextView title
+    EditText startDate
+    EditText endDate
+    ImageButton startDateButton
+    ImageButton endDateButton
+    Button searchButton
+    private String exerciseSelected
+    Calendar calendar
+
+    public void updateHistoryList(ArrayList<Set>)
+    private boolean isDateNotValid(String)
+    private boolean compareDate(String, String)
+    private void updateDateDisplay(EditText)
+    private void setButtonDisabledColorFilter(Button, boolean)
+    }
+
+    class DateWatcher{
+    public void beforeTextChanged(CharSequence, int, int, int)
+    public void onTextChanged(CharSequence, int, int, int)
+    public void afterTextChanged(Editable)
+    }
+
+    class ExerciseHistoryArrayAdapter{
+    private ArrayList<Set> itemList
+    private final static String TAG
+    private final static String TIMESTAMP_FORMAT_DB
+    private static final String DATE_FORMAT_DISPLAY
+    private static final String DATE_FORMAT_DB
+    private static final int TYPE_HEADER
+    private static final int TYPE_ITEM
+    private String lastDate
+
+    public ExerciseHistoryArrayAdapter(ArrayList<Set>)
+    public ViewHolder onCreateViewHolder(ViewGroup, int)
+    public void onBindViewHolder(ExerciseItemArrayAdapter.ViewHolder, int)
+    public int getItemCount()
+    private String getDateFromString(String)
+
+    }
+
+}
+
+
+class BaseAdapter{
+}
+interface InputFilter <<interface>>{
+}
+interface View.OnClick <<interface>>{
+}
+interface TextWatcher <<interface>>{
+}
+class  RecyclerView.ViewHolder{
+}
+class Fragment{
+}
+class BackStackChangedListener{
+}
+class Dialog{
+}
+
+class CursorAdapter{
+}
+
+class FileProvider{
+}
+
+AsyncTask <|-- XMLParse
+XMLParse <|-- ExerciseList
+ExerciseData <|--- IExerciseData
+ExerciseList <|-- IExerciseList
 
 EXERCISE_TARGET -- Exercise
 EXERCISE_TYPE -- Exercise
 Set -- Exercise
 ExerciseData -- Exercise
 
-interface IExerciseList.Presenter <<interface>> {
-    ArrayList<ExerciseList> getExerciseList(ExerciseFilter)
-    openExerciseEditor(Exercise)
-    stop();
-}
+FileProvider -- SummaryActivity
+SummaryCursorAdapter -- SummaryActivity
+CursorAdapter -- SummaryCursorAdapter
 
+XMLValidate <|-- ImportExportActivity
+AsyncTask <|-- XMLValidate
 
-interface IExerciseList.View <<interface>> {
-    displayExercisesByFilter(ExerciseFilter)
-    updateProgressBar(int)
-    showExerciseEditor(Exercise)
-}
+ImportExportActivity -- ProgressDialog
+Dialog -- ProgressDialog
 
-interface IExerciseData.Presenter <<interface>> {
-    int addExercise(Exercise)
-    Exercise getLastExercise()
-    int deleteExercise(Exercise)
-    int getExerciseByDate(DATE_RANGE)
-    int updateExercise(Exercise)
-}
+FragmentBackStackListener -- ExerciseActivity
+BackStackChangedListener -- FragmentBackStackListener
 
-interface IExerciseData.View <<interface>> {
-    displaySetData(Exercise)
-}
+Fragment -- ExerciseListFragment
+ExerciseListFragment -- ExerciseItemArrayAdapter
+ExerciseItemArrayAdapter -- ViewHolder
+RecyclerView --|> View.OnClick
+ExerciseListFragment -- OnExerciseItemSelectedListener
+OnExerciseItemSelectedListener <|-- OnItemClickListener
+FragmentListener <|-- ExerciseActivity
+NumberFilter -- ExerciseDataFragment
+InputFilter <|-- NumberFilter
+ValueChangeWatcher -- ExerciseDataFragment
+TextWatcher <|-- ValueChangeWatcher
 
-enum EXERCISE_TYPE {
-    FREEWEIGHT
-    MACHINE
-    BODYWEIGHT
-    RESISTANCE
-}
+RecyclerView --ExerciseSetArrayAdapter
+BaseAdapter -- ExerciseSetArrayAdapter
+ExerciseSetArrayAdapter -- ExerciseDataFragment
+TextWatcher <|-- DateWatcher
+WeightDialogButtonClick -- ExerciseDataFragment
 
-ENUM EXERCISE_TARGET {
-    BICEP
-    TRICEP
-    FOREARM
-    WRIST
-    FRONT_DELTOID
-    REAR_DELTOID
-    SIDE_DELTOID
-    TRAPEZIUS
-    LOWER_BACK
-    UPPER_BACK
-    LATS
-    HAMSTRING
-    QUADRICEP
-    CALF
-    GLUTEUS
-}
+ExerciseHistoryFragment -- ExerciseHistoryArrayAdapter
+ExerciseHistoryArrayAdapter -- RecyclerView
 
-enum ExerciseFilter{
-    TYPE
-    TARGET
-}
-
-enum ExerciseDetailFilter{
-    TYPE
-    TARGET
-    DATE_RANGE
-}
-
-class Set{
-int weight_lbs
-int reps
-int orderNumber
-
-int addWeight()
-int deleteWeight()
-}
-
-AsyncTask <|-- ExerciseData
-ExerciseData <|--- IExerciseData
-
-class ExerciseData{
-    Exercise exercise
-
-    Exercise getLastExerciseData()
-    addExercise(Exercise)
-    getExerciseDataByDate()
-}
-
-enum MEASUREMENT_UNIT{
-    KGS
-    LBS
-}
-
+SQLiteOpenHelper -- DatabaseHelper
+DatabaseHelper -- ExerciseData
+ExerciseActivity -- ExerciseDataFragment
+ExerciseActivity -- ExerciseListFragment
+ExerciseActivity -- ExerciseData
+ExerciseActivity -- ExerciseList
+ExerciseList -- ExerciseListItem
 
 @enduml

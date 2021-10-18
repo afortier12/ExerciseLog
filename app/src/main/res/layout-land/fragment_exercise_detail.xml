@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.3" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.6" />
+
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/default_margin"
+                    android:gravity="center"
+                    android:text="Title"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:layout_constraintEnd_toEndOf="@id/guideline2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Space
+                    android:id="@+id/space_vertical1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/title" />
+
+                <TextView
+                    android:id="@+id/targetLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:gravity="end"
+                    android:text="@string/target_label"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline"
+                    app:layout_constraintTop_toBottomOf="@id/space_vertical1" />
+
+                <TextView
+                    android:id="@+id/targetValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:text="muscle"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toBottomOf="@id/space_vertical1" />
+
+                <TextView
+                    android:id="@+id/typeLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:paddingBottom="@dimen/default_margin"
+                    android:text="@string/type_label"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toStartOf="@id/guideline"
+                    app:layout_constraintTop_toBottomOf="@id/targetLabel" />
+
+                <TextView
+                    android:id="@+id/typeValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginEnd="@dimen/default_margin"
+                    android:text="resistance"
+                    android:textColor="@android:color/white"
+                    android:textSize="16sp"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintTop_toBottomOf="@id/targetLabel" />
+
+                <TextView
+                    android:id="@+id/weightLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:text="@string/weight_label"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/type_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/typeLabel" />
+
+                <EditText
+                    android:id="@+id/weightEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/list_margin"
+                    android:autofillHints="@string/weight_hint"
+                    android:gravity="start"
+                    android:hint="@string/enter_weight"
+                    android:inputType="number"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/type_text"
+                    android:textSize="@dimen/input_text"
+                    app:layout_constraintEnd_toStartOf="@id/guideline"
+                    app:layout_constraintHorizontal_weight="2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/weightLabel"
+                    tools:targetApi="o" />
+
+                <ImageButton
+                    android:id="@+id/weightAddButton"
+                    style="@style/buttonIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:contentDescription="@string/add_weight_desc"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintEnd_toEndOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@+id/weightEditText"
+                    app:srcCompat="@drawable/ic_iconfinder_48_calculator_24px" />
+
+                <TextView
+                    android:id="@+id/repsLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:text="@string/reps_label"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/type_text"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/weightEditText"
+                    />
+
+                <EditText
+                    android:id="@+id/repsEditText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:autofillHints="@string/reps_hint"
+                    android:gravity="start"
+                    android:hint="@string/enter_reps"
+                    android:inputType="numberDecimal"
+                    android:textColor="@android:color/white"
+                    android:textColorHint="@color/type_text"
+                    android:textSize="@dimen/input_text"
+                    android:imeOptions="actionDone"
+                    app:layout_constraintEnd_toStartOf="@id/guideline"
+                    app:layout_constraintHorizontal_weight="2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/repsLabel"
+                    tools:targetApi="o" />
+
+                <ImageButton
+                    android:id="@+id/repIncrButton"
+                    style="@style/buttonIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_marginTop="4dp"
+                    android:contentDescription="@string/add_weight_desc"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@id/guideline"
+                    app:layout_constraintEnd_toStartOf="@id/repDecrButton"
+                    app:layout_constraintTop_toTopOf="@+id/repsEditText"
+                    app:srcCompat="@drawable/ic_add_box_24px" />
+
+                <ImageButton
+                    android:id="@+id/repDecrButton"
+                    style="@style/buttonIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="4dp"
+                    android:contentDescription="@string/remove_weight_desc"
+                    app:layout_constraintHorizontal_weight="1"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@id/repIncrButton"
+                    app:layout_constraintEnd_toEndOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="@+id/repsEditText"
+                    app:srcCompat="@drawable/ic_remove_box_24px" />
+
+                <Button
+                    android:id="@+id/save_set_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:background="@color/colorAccent"
+                    android:drawableStart="@drawable/ic_save_alt_24px"
+                    android:padding="@dimen/default_margin"
+                    android:text="@string/save_set"
+                    android:textColor="@color/button_text"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toTopOf="parent"  />
+
+
+                <Space
+                    android:id="@+id/space_vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:orientation="vertical"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toBottomOf="@id/save_set_button" />
+
+                <FrameLayout
+                    android:id="@+id/list_container"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/colorBodyDark"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@id/guideline2"
+                    app:layout_constraintTop_toBottomOf="@id/space_vertical">
+
+                        <ListView
+                            android:id="@+id/setList"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/activity_margin"
+                            android:background="@android:color/white"
+                            android:scrollbars="vertical" />
+
+                </FrameLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/save_exercise_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:contentDescription="@string/save_exercise"
+            android:src="@drawable/ic_check_24px"
+            android:backgroundTint="@color/colorAccent"
+            style="@style/buttonIcon"
+            app:layout_anchor="@id/list_container"
+            app:layout_anchorGravity="bottom|end"
+            app:useCompatPadding="false"
+            app:fabSize="normal"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

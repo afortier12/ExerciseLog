@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Journal d\'exercises</string>
+    <string name="about_message">
+        <![CDATA[
+        <<h1>Journal d\'exercices</h1>
+        <h2>Comment utiliser cette application:</h2>
+        <li>Dans le résumé, sélectionnez "COMMENCER"</li>
+        <li>Sélectionnez un exercice dans la liste
+        <li>Filtrer par type ou groupe musculaire cible</li>
+        </li>
+        <li>Entrez le poids et les répétitions pour chaque ensemble</li>
+        <li>Enregistrez chaque jeu en appuyant sur le bouton "ENREGISTRER"
+        <li>Supprimer un ensemble en appuyant sur l\'icône de la corbeille à côté</li>
+        <li>Afficher un historique de l\'exercice en appuyant sur l\'icône "date" dans la barre d\'outils</li>
+        </li>
+        <li>Enregistrez l\'exercice en appuyant sur la coche dans le coin inférieur</li>
+        <li>Importez / exportez la liste des exercices en appuyant sur l\'icône "boîte à outils" dans la barre d\'outils</li>
+        <p>Auteur: Adam Fortier 195827350</p>
+        <p>Version: 1.0</p>
+        <p>CP670</p>
+         ]]>
+    </string>
+    <string name="about_message_title">Sur</string>
+    <string name="action_about">Sur</string>
+    <string name="action_edit">Modifier l\'exercice</string>
+    <string name="action_filter">Filtre</string>
+    <string name="action_history">Histoire</string>
+    <string name="action_tools">Outils</string>
+    <string name="add_weight_desc">Ajouter du poid</string>
+    <string name="cancel">annuler</string>
+    <string name="delete_set_description">Supprimer l\'ensemble</string>
+    <string name="end_date_description">Sélectionnez la date de fin</string>
+    <string name="end_label">Date de fin</string>
+    <string name="enter_reps">Entrer des reps</string>
+    <string name="enter_weight">Entrez le poids</string>
+    <string name="exercise_added_success">L\'exercice a été ajouté avec succès</string>
+    <string name="exercise_exists">Voulez-vous utiliser les données définies lors de votre dernier entraînement?</string>
+    <string name="export_description">Exporter la liste d\'exercices</string>
+    <string name="export_label">Exporter la liste</string>
+    <string name="export_nok">L\'exportation a échoué</string>
+    <string name="export_ok">Exportation réussie</string>
+    <string name="import_description">Importer la liste d\'exercices</string>
+    <string name="import_label">Liste d\'importation</string>
+    <string name="import_nok">L\'importation a échoué</string>
+    <string name="import_ok">Fichier importé avec succès</string>
+    <string name="list_filter_dialog_title">Filtrer la liste d\'exercices</string>
+    <string name="loading">Chargement de la liste d\'exercices ...</string>
+    <string name="no">NON</string>
+    <string name="of">de</string>
+    <string name="remove_weight_desc">Diminuer le poids</string>
+    <string name="reps_label">Reps</string>
+    <string name="save_exercise">Achevé</string>
+    <string name="save_set">Enregistrer</string>
+    <string name="search_history">Chercher</string>
+    <string name="select_exercise">Commencer l\'entraînement</string>
+    <string name="set_label">#</string>
+    <string name="start_date_description">"Sélectionnez la date de début "</string>
+    <string name="start_label">"Date de début "</string>
+    <string name="summary">Sommaire</string>
+    <string name="target_header">Groupe musculaire</string>
+    <string name="target_label">"Groupe musculaire cible "</string>
+    <string name="total_weight">Totale:</string>
+    <string name="type_label">Type de résistance</string>
+    <string name="weight_dialog_title">Sélectionnez les poids utilisés</string>
+    <string name="yes">OUI</string>
+    <string name="weight_label">Poids(lbs)</string>
+    <string name="history_title">Histoire</string>
+</resources>

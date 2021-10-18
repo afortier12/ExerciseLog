@@ -6,47 +6,46 @@
 left to right direction
 
 rectangle exercises {
-(Log time) as (Log)
 (View History) as (history)
 (Browse Exercises) as (browse)
 (Select Exercise) as (select)
 (Add set) as (add_set)
-(Add exercise) as (add_ex)
 (Add weight) as (weight_add)
 (Add reps) as (reps_add)
-(Start Timer) as (start)
+(Save exercise) as (save)
+(Exercise) as (exercise)
+(View summary) as summary
 
 
 user -- (browse)
-user --(add_ex)
 user -- (select)
 user -- (add_set)
-user -- (start)
+user -- (weight_add)
+user -- (reps_add)
+user -- (save)
+user -- (history)
+user -- summary
 
-
-(select) <|-- (history)
-
-(add_set) -l-|> (select)
-(add_set) <|-- (Log)
 (add_set) <|-- (weight_add)
 (add_set) <|-- (reps_add)
+(add_set) --|> (exercise)
 
-:Timer: <.d. (start)
-:Timer: ..> (Log)
+(select) -- exercise
 
 (browse) ---- xml
-(add_ex) ----xml
-(add_ex) ---- Db
-(history) -- Db
-(Log) -- Db
-(weight_add) -- Db
-(reps_add) -- Db
+(history) <|-- Db
+(summary) <|--Db
+(save) -- exercise
+(exercise) --|> Db
 }
 
 rectangle tools{
-(Update weight) as (weight)
+(Import) as (import)
+(Export) as (export)
 
-user  -- (weight)
-(weight) ---- Db
+user  -- (import)
+(import) ---- xml
+user -- (export)
+(export) ---- xml
 }
 @enduml

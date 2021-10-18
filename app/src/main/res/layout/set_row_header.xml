@@ -15,17 +15,7 @@
         android:text="@string/set_label"
         android:textAlignment="center"
         android:textSize="14sp"
-        android:textColor="@android:color/black"/>
-
-    <TextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:text="@string/weight_label"
-        android:textAlignment="center"
-        android:textSize="14sp"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/white"/>
 
     <TextView
         android:layout_width="0dp"
@@ -35,7 +25,17 @@
         android:text="@string/reps_label"
         android:textAlignment="center"
         android:textSize="14sp"
-        android:textColor="@android:color/black"/>
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:gravity="center_vertical"
+        android:text="@string/weight_label"
+        android:textAlignment="center"
+        android:textSize="14sp"
+        android:textColor="@android:color/white"/>
 
     <ImageButton
         android:layout_width="wrap_content"

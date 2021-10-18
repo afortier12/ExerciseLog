@@ -6,11 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusable="true"
-    android:background="@color/colorBodyDark">
+    android:focusable="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/exercise_edit_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -121,7 +119,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="@dimen/default_margin"
                     android:contentDescription="@string/add_weight_desc"
-                    android:onClick="onWeightDialog"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@id/guideline"
                     app:layout_constraintEnd_toEndOf="parent"

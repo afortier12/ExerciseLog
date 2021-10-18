@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/app_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0" />
+
+
+    <LinearLayout
+        android:id="@+id/importButtonLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:orientation="horizontal"
+        android:background="@color/colorBodyLight"
+        android:onClick="onImport"
+        android:layout_weight="0">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/import_description"
+            app:srcCompat="@drawable/ic_import_24px"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:text="@string/import_label"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/exportButtonLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/default_margin"
+        android:orientation="horizontal"
+        android:background="@color/colorBodyLight"
+        android:onClick="onExport"
+        android:layout_weight="0"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="fitXY"
+            android:contentDescription="@string/export_description"
+            app:srcCompat="@drawable/ic_export_24px"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginEnd="@dimen/default_margin"
+            android:text="@string/export_label"
+            android:textColor="@android:color/black"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

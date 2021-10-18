@@ -1,17 +1,14 @@
 <resources>
     <string name="app_name">Exercise Log</string>
-    <string name="preference_name">my_shared_preferences</string>
-    <string name="preference_key_default_loaded">default_loaded</string>
     <string name="action_filter">Filter</string>
     <string name="action_edit">Edit Exercise</string>
-    <string name="action_setting">Settings</string>
     <string name="action_about">About</string>
     <string name="weight_label">Weight(lbs)</string>
     <string name="add_weight_desc">Add weight</string>
     <string name="enter_weight">Enter weight</string>
-    <string name="weight_hint">0.0</string>
+    <string name="weight_hint" translatable="false">0.0</string>
     <string name="reps_label">Reps</string>
-    <string name="reps_hint">0</string>
+    <string name="reps_hint" translatable="false">0</string>
     <string name="enter_reps">Enter reps</string>
     <string name="remove_weight_desc">Decrease weight</string>
     <string name="save_set">Save</string>
@@ -21,28 +18,64 @@
     <string name="weight_dialog_title">Select weights used</string>
     <string name="total_weight">Total:</string>
     <string name="cancel">cancel</string>
-    <string name="ok">ok</string>
+    <string name="ok" translatable="false">OK</string>
     <string name="save_exercise">Completed</string>
-    <string name="exercise_exists">Dou you want to use the set data from your last workout?</string>
+    <string name="exercise_exists">Do you want to use the set data from your last workout?</string>
     <string name="delete_set_description">Delete set</string>
-    <string name="placeholder">placeholder</string>
+    <string name="placeholder" translatable="false">placeholder</string>
     <string name="set_label">Set#</string>
     <string name="exercise_added_success">Exercise added successfully</string>
-    <string name="exercise_added_fail">Exercise add failed!</string>
     <string name="yes">YES</string>
     <string name="no">NO</string>
     <string name="list_filter_dialog_title">Filter Exercise List</string>
     <string name="start_date_description">Select start date</string>
     <string name="start_label">Start Date:</string>
-    <string name="date_hint">DD/MM/YYYY</string>
-    <string name="enter_start_date">Enter start date</string>
+    <string name="date_hint" translatable="false">MM/DD/YYYY</string>
     <string name="end_label">End Date:</string>
-    <string name="enter_end_date">Enter end date</string>
     <string name="end_date_description">Select End Date</string>
-    <string name="date_label">Date</string>
     <string name="search_history">Search</string>
     <string name="action_tools">Tools</string>
     <string name="action_history">History</string>
     <string name="summary">Summary</string>
     <string name="target_header">Muscle Group</string>
+    <string name="select_exercise">Start Workout</string>
+    <string name="import_description">Import exercise list</string>
+    <string name="import_label">Import list</string>
+    <string name="export_label">Export List</string>
+    <string name="export_description">Export exercise list</string>
+    <string name="export_ok">Export successful</string>
+    <string name="export_nok">Export failed</string>
+    <string name="import_ok">File imported successfully</string>
+    <string name="import_nok">Import failed!</string>
+    <string name="of">of</string>
+    <string name="max_label" translatable="false">MAX</string>
+    <string name="min_label" translatable="false">MIN</string>
+    <string name="about_message">
+        <![CDATA[
+        <<h1>Exercise Log</h1>
+        <h2>How to use this app:</h2>
+        <ol>
+        <li>From the Summary select "START WORKOUT'</li>
+        <li>Select an exercise from the list
+        <ol>
+        <li>Filter by type or target muscle group</li>
+        </ol>
+        </li>
+        <li>Enter the weight and reps for each set</li>
+        <li>Save each set by pressing the "SAVE SET" button
+        <ol>
+        <li>Delete a set by pressing the trash can icon beside it</li>
+        <li>View a history of the exercise by pressing the "date" icon in the tool bar</li>
+        </ol>
+        </li>
+        <li>Save the exercise by pressing the check mark in the bottom corner</li>
+        <li>Import/export the list of exercises by pressing the "toolbox" icon in the tool bar</li>
+        </ol>
+        <p>Author: Adam Fortier 195827350</p>
+        <p>Version: 1.0</p>
+        <p>CP670</p>
+        ]]>
+    </string>
+    <string name="about_message_title">About</string>
+    <string name="history_title">History</string>
 </resources>
